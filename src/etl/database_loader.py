@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, text
+from sqlalchemy import text
 import pandas as pd
 
 def load_teams(engine, teams_df):
