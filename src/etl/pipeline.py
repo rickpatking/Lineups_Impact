@@ -21,8 +21,7 @@ def process_single_game(game_id, engine):
     database_loader.load_lineup_stints(engine, all_stints)
     return True # to say that everything worked
 
-def process_season(connection_str, season='2024-25'):
-    engine = create_engine(connection_str)
+def process_season(season, engine):
     games = nba_data_extractor.get_season_games(season)
     game_ids = games['GAME_ID'].unique()
 
@@ -31,6 +30,6 @@ def process_season(connection_str, season='2024-25'):
 
     for game_id in unprocessed_games:
         try:
-            process_single_game(game_id, connection_str)
+            process_single_game(game_id, engine)
         except Exception as e:
             print(e)
