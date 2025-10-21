@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS play_by_play(
     period INT,
     clock VARCHAR(15),
     seconds_left_in_game INT,
+    seconds_into_game INT,
     player_id INT,
     player_name VARCHAR(80),
     team_id INT,

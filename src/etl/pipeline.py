@@ -24,6 +24,7 @@ def process_single_game(game_id, engine):
             lineups = get_lineups(clean_pbp, clean_subs, team)
             stints = get_stints(clean_pbp, lineups[0], lineups[1], team)
             stints = stints[stints['duration_secs'] != 0].copy()
+            # get seconds into the game too for pbp
             all_stints.append(stints)
         all_stints =  pd.concat(all_stints)
 
