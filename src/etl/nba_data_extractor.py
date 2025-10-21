@@ -1,5 +1,5 @@
 import pandas as pd
-from nba_api.stats.endpoints import playbyplayv3, leaguegamefinder, commonteamroster
+from nba_api.stats.endpoints import playbyplayv3, leaguegamefinder, commonteamroster, boxscoretraditionalv3, commonplayerinfo
 from nba_api.stats.static import teams, players
 
 def get_season_games(season='2023-24'):
@@ -47,3 +47,25 @@ def pbp_cleaner(pbp):
                               'shotValue': 'shot_value',
                               'shotResult': 'shot_result'})
     return pbp
+
+def get_game_info(game_id):
+    game_data = boxscoretraditionalv3.BoxScoreTraditionalV3(game_id)
+    game_data = game_data.get_data_frames()[2]
+    game_df = pd.DataFrame({'game_id': [game_id],
+                            'home_team_id': [game_data['teamId'][0]],
+                            'away_team_id': [game_data['teamId'][1]],
+                            'home_score': [game_data['points'][0]],
+                            'away_score': [game_data['points'][1]]
+                            })
+    return game_df
+
+def get_player_info(player_id):
+    player_data = commonplayerinfo.CommonPlayerInfo(player_id) 
+    player_data = player_data.get_data_frames()[0]
+    player_df = pd.DataFrame({'player_id': [player_id],
+                            'player_name': [player_data['PLAYER_SLUG'][0]],
+                            'position': [player_data['POSITION'][0]],
+                            'height': [player_data['HEIGHT'][0]],
+                            'weight': [player_data['WEIGHT'][0]]
+                            })
+    return player_df

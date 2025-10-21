@@ -26,3 +26,7 @@ def check_game_exists(engine, game_id):
 def get_loaded_games(engine):
     query = "SELECT DISTINCT game_id FROM play_by_play ORDER BY game_id"
     return pd.read_sql(query, engine)['game_id'].tolist()
+
+def get_loaded_players(engine):
+    query = "SELECT DISTINCT player_id FROM players ORDER BY player_id"
+    return pd.read_sql(query, engine)['player_id'].tolist()

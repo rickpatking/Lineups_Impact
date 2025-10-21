@@ -1,0 +1,241 @@
+2025-10-20 20:02:18 - __main__ - INFO - NBA LINEUP ANALYSIS ETL PIPELINE
+2025-10-20 20:02:18 - __main__ - INFO - Mode: Full Season (2023-24)
+2025-10-20 20:02:18 - src.utils.db_connection - INFO - Creating database engine: localhost:5432/nba_analysis
+2025-10-20 20:02:19 - __main__ - ERROR - Error (psycopg2.errors.UndefinedTable) relation "play_by_play" does not exist
+LINE 1: SELECT DISTINCT game_id FROM play_by_play ORDER BY game_id
+                                     ^
+
+[SQL: SELECT DISTINCT game_id FROM play_by_play ORDER BY game_id]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-10-20 21:02:35 - __main__ - INFO - NBA LINEUP ANALYSIS ETL PIPELINE
+2025-10-20 21:02:35 - __main__ - INFO - Mode: Full Season (2023-24)
+2025-10-20 21:02:35 - src.utils.db_connection - INFO - Creating database engine: localhost:5432/nba_analysis
+2025-10-20 21:02:35 - __main__ - ERROR - Error (psycopg2.errors.UndefinedTable) relation "play_by_play" does not exist
+LINE 1: SELECT DISTINCT game_id FROM play_by_play ORDER BY game_id
+                                     ^
+
+[SQL: SELECT DISTINCT game_id FROM play_by_play ORDER BY game_id]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-10-20 21:03:33 - __main__ - INFO - NBA LINEUP ANALYSIS ETL PIPELINE
+2025-10-20 21:03:33 - __main__ - INFO - Mode: Full Season (2023-24)
+2025-10-20 21:03:33 - src.utils.db_connection - INFO - Creating database engine: localhost:5432/nba_analysis
+2025-10-20 21:03:33 - __main__ - ERROR - Error (psycopg2.errors.UndefinedTable) relation "play_by_play" does not exist
+LINE 1: SELECT DISTINCT game_id FROM play_by_play ORDER BY game_id
+                                     ^
+
+[SQL: SELECT DISTINCT game_id FROM play_by_play ORDER BY game_id]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-10-20 21:12:41 - __main__ - INFO - NBA LINEUP ANALYSIS ETL PIPELINE
+2025-10-20 21:12:41 - __main__ - INFO - Mode: Full Season (2023-24)
+2025-10-20 21:12:41 - src.utils.db_connection - INFO - Creating database engine: localhost:5432/nba_analysis
+2025-10-20 21:12:41 - src.etl.pipeline - INFO - Processing game 0042300405
+2025-10-20 21:12:42 - src.etl.pipeline - INFO - Processing game 0042300404
+2025-10-20 21:12:43 - src.etl.pipeline - INFO - Processing game 0042300403
+2025-10-20 21:12:44 - src.etl.pipeline - INFO - Processing game 0042300402
+2025-10-20 21:12:45 - src.etl.pipeline - INFO - Processing game 0042300401
+2025-10-20 21:12:45 - src.etl.pipeline - INFO - Processing game 0042300315
+2025-10-20 21:12:46 - src.etl.pipeline - INFO - Processing game 0042300314
+2025-10-20 21:12:46 - src.etl.pipeline - INFO - Processing game 0042300304
+2025-10-20 21:12:47 - src.etl.pipeline - INFO - Processing game 0042300313
+2025-10-20 21:12:47 - src.etl.pipeline - INFO - Processing game 0042300303
+2025-10-20 21:12:48 - src.etl.pipeline - INFO - Processing game 0042300312
+2025-10-20 21:12:49 - src.etl.pipeline - INFO - Processing game 0042300302
+2025-10-20 21:12:49 - src.etl.pipeline - INFO - Processing game 0042300311
+2025-10-20 21:12:50 - src.etl.pipeline - INFO - Processing game 0042300301
+2025-10-20 21:12:51 - src.etl.pipeline - INFO - Processing game 0042300237
+2025-10-20 21:12:51 - src.etl.pipeline - INFO - Processing game 0042300217
+2025-10-20 21:12:52 - src.etl.pipeline - INFO - Processing game 0042300226
+2025-10-20 21:12:52 - src.etl.pipeline - INFO - Processing game 0042300216
+2025-10-20 21:12:53 - src.etl.pipeline - INFO - Processing game 0042300236
+2025-10-20 21:12:54 - src.etl.pipeline - INFO - Processing game 0042300225
+2025-10-20 21:12:55 - src.etl.pipeline - INFO - Processing game 0042300205
+2025-10-20 21:12:56 - src.etl.pipeline - INFO - Processing game 0042300235
+2025-10-20 21:12:56 - src.etl.pipeline - INFO - Processing game 0042300215
+2025-10-20 21:12:57 - src.etl.pipeline - INFO - Processing game 0042300224
+2025-10-20 21:12:57 - src.etl.pipeline - INFO - Processing game 0042300204
+2025-10-20 21:12:58 - src.etl.pipeline - INFO - Processing game 0042300234
+2025-10-20 21:12:58 - src.etl.pipeline - INFO - Processing game 0042300214
+2025-10-20 21:12:59 - src.etl.pipeline - INFO - Processing game 0042300223
+2025-10-20 21:13:00 - src.etl.pipeline - INFO - Processing game 0042300203
+2025-10-20 21:13:00 - src.etl.pipeline - INFO - Processing game 0042300213
+2025-10-20 21:13:01 - src.etl.pipeline - INFO - Processing game 0042300233
+2025-10-20 21:13:01 - src.etl.pipeline - INFO - Processing game 0042300222
+2025-10-20 21:13:02 - src.etl.pipeline - INFO - Processing game 0042300202
+2025-10-20 21:13:02 - src.etl.pipeline - INFO - Processing game 0042300212
+2025-10-20 21:13:03 - src.etl.pipeline - INFO - Processing game 0042300201
+2025-10-20 21:13:03 - src.etl.pipeline - INFO - Processing game 0042300221
+2025-10-20 21:13:04 - src.etl.pipeline - INFO - Processing game 0042300232
+2025-10-20 21:13:05 - src.etl.pipeline - INFO - Processing game 0042300211
+2025-10-20 21:13:10 - src.etl.pipeline - INFO - Processing game 0042300137
+2025-10-20 21:13:11 - src.etl.pipeline - INFO - Processing game 0042300231
+2025-10-20 21:13:12 - src.etl.pipeline - INFO - Processing game 0042300176
+2025-10-20 21:13:13 - src.etl.pipeline - INFO - Processing game 0042300136
+2025-10-20 21:13:14 - src.etl.pipeline - INFO - Processing game 0042300126
+2025-10-20 21:13:14 - src.etl.pipeline - INFO - Processing game 0042300116
+2025-10-20 21:13:15 - src.etl.pipeline - INFO - Processing game 0042300105
+2025-10-20 21:13:15 - src.etl.pipeline - INFO - Processing game 0042300175
+2025-10-20 21:13:16 - src.etl.pipeline - INFO - Processing game 0042300125
+2025-10-20 21:13:19 - src.etl.pipeline - INFO - Processing game 0042300115
+2025-10-20 21:13:19 - src.etl.pipeline - INFO - Processing game 0042300135
+2025-10-20 21:13:19 - src.etl.pipeline - INFO - Processing game 0042300104
+2025-10-20 21:13:20 - src.etl.pipeline - INFO - Processing game 0042300144
+2025-10-20 21:13:21 - src.etl.pipeline - INFO - Processing game 0042300155
+2025-10-20 21:13:21 - src.etl.pipeline - INFO - Processing game 0042300114
+2025-10-20 21:13:22 - src.etl.pipeline - INFO - Processing game 0042300164
+2025-10-20 21:13:22 - src.etl.pipeline - INFO - Processing game 0042300174
+2025-10-20 21:13:26 - src.etl.pipeline - INFO - Processing game 0042300124
+2025-10-20 21:13:27 - src.etl.pipeline - INFO - Processing game 0042300154
+2025-10-20 21:13:27 - src.etl.pipeline - INFO - Processing game 0042300134
+2025-10-20 21:13:28 - src.etl.pipeline - INFO - Processing game 0042300143
+2025-10-20 21:13:29 - src.etl.pipeline - INFO - Processing game 0042300103
+2025-10-20 21:13:30 - src.etl.pipeline - INFO - Processing game 0042300163
+2025-10-20 21:13:31 - src.etl.pipeline - INFO - Processing game 0042300173
+2025-10-20 21:13:31 - src.etl.pipeline - INFO - Processing game 0042300123
+2025-10-20 21:13:32 - src.etl.pipeline - INFO - Processing game 0042300113
+2025-10-20 21:13:33 - src.etl.pipeline - INFO - Processing game 0042300153
+2025-10-20 21:13:33 - src.etl.pipeline - INFO - Processing game 0042300133
+2025-10-20 21:13:34 - src.etl.pipeline - INFO - Processing game 0042300102
+2025-10-20 21:13:34 - src.etl.pipeline - INFO - Processing game 0042300142
+2025-10-20 21:13:34 - src.etl.pipeline - INFO - Processing game 0042300122
+2025-10-20 21:13:35 - src.etl.pipeline - INFO - Processing game 0042300162
+2025-10-20 21:13:35 - src.etl.pipeline - INFO - Processing game 0042300172
+2025-10-20 21:13:36 - src.etl.pipeline - INFO - Processing game 0042300132
+2025-10-20 21:13:37 - src.etl.pipeline - INFO - Processing game 0042300152
+2025-10-20 21:13:37 - src.etl.pipeline - INFO - Processing game 0042300112
+2025-10-20 21:13:38 - src.etl.pipeline - INFO - Processing game 0042300171
+2025-10-20 21:13:38 - src.etl.pipeline - INFO - Processing game 0042300101
+2025-10-20 21:13:38 - src.etl.pipeline - INFO - Processing game 0042300121
+2025-10-20 21:13:39 - src.etl.pipeline - INFO - Processing game 0042300141
+2025-10-20 21:13:39 - src.etl.pipeline - INFO - Processing game 0042300151
+2025-10-20 21:13:40 - src.etl.pipeline - INFO - Processing game 0042300131
+2025-10-20 21:13:40 - src.etl.pipeline - INFO - Processing game 0042300111
+2025-10-20 21:13:41 - src.etl.pipeline - INFO - Processing game 0042300161
+2025-10-20 21:13:42 - src.etl.pipeline - INFO - Processing game 0052300201
+2025-10-20 21:13:43 - src.etl.pipeline - INFO - Processing game 0052300211
+2025-10-20 21:13:43 - src.etl.pipeline - INFO - Processing game 0052300111
+2025-10-20 21:13:44 - src.etl.pipeline - INFO - Processing game 0052300101
+2025-10-20 21:13:45 - src.etl.pipeline - INFO - Processing game 0052300131
+2025-10-20 21:13:45 - src.etl.pipeline - INFO - Processing game 0052300121
+2025-10-20 21:13:46 - src.etl.pipeline - INFO - Processing game 2042300403
+2025-10-20 21:13:47 - src.etl.pipeline - INFO - Processing game 0022301192
+2025-10-20 21:13:47 - src.etl.pipeline - INFO - Processing game 0022301197
+2025-10-20 21:13:47 - src.etl.pipeline - INFO - Processing game 0022301190
+2025-10-20 21:13:48 - src.etl.pipeline - INFO - Processing game 0022301194
+2025-10-20 21:13:48 - src.etl.pipeline - INFO - Processing game 0022301199
+2025-10-20 21:13:49 - src.etl.pipeline - INFO - Processing game 0022301186
+2025-10-20 21:13:50 - src.etl.pipeline - INFO - Processing game 0022301196
+2025-10-20 21:13:50 - src.etl.pipeline - INFO - Processing game 0022301193
+2025-10-20 21:13:50 - src.etl.pipeline - INFO - Processing game 0022301200
+2025-10-20 21:13:51 - src.etl.pipeline - INFO - Processing game 0022301195
+2025-10-20 21:13:52 - src.etl.pipeline - INFO - Processing game 0022301188
+2025-10-20 21:13:52 - src.etl.pipeline - INFO - Processing game 0022301198
+2025-10-20 21:13:53 - src.etl.pipeline - INFO - Processing game 0022301189
+2025-10-20 21:13:54 - src.etl.pipeline - INFO - Processing game 0022301191
+2025-10-20 21:13:54 - src.etl.pipeline - INFO - Processing game 0022301187
+2025-10-20 21:13:55 - src.etl.pipeline - INFO - Processing game 0022301172
+2025-10-20 21:13:56 - src.etl.pipeline - INFO - Processing game 0022301182
+2025-10-20 21:13:56 - src.etl.pipeline - INFO - Processing game 0022301176
+2025-10-20 21:13:57 - src.etl.pipeline - INFO - Processing game 0022301181
+2025-10-20 21:13:57 - src.etl.pipeline - INFO - Processing game 0022301174
+2025-10-20 21:13:58 - src.etl.pipeline - INFO - Processing game 0022301177
+2025-10-20 21:13:59 - src.etl.pipeline - INFO - Processing game 0022301180
+2025-10-20 21:13:59 - src.etl.pipeline - INFO - Processing game 0022301185
+2025-10-20 21:14:00 - src.etl.pipeline - INFO - Processing game 0022301183
+2025-10-20 21:14:02 - src.etl.pipeline - INFO - Processing game 0022301179
+2025-10-20 21:14:02 - src.etl.pipeline - INFO - Processing game 0022301175
+2025-10-20 21:14:03 - src.etl.pipeline - INFO - Processing game 0022301178
+2025-10-20 21:14:04 - src.etl.pipeline - INFO - Processing game 0022301171
+2025-10-20 21:14:05 - src.etl.pipeline - INFO - Processing game 0022301184
+2025-10-20 21:14:06 - src.etl.pipeline - INFO - Processing game 0022301173
+2025-10-20 21:14:07 - src.etl.pipeline - INFO - Processing game 0022301167
+2025-10-20 21:14:07 - src.etl.pipeline - INFO - Processing game 0022301166
+2025-10-20 21:14:09 - src.etl.pipeline - INFO - Processing game 0022301168
+2025-10-20 21:14:10 - src.etl.pipeline - INFO - Processing game 2042300402
+2025-10-20 21:14:11 - src.etl.pipeline - INFO - Processing game 0022301170
+2025-10-20 21:14:11 - src.etl.pipeline - INFO - Processing game 0022301169
+2025-10-20 21:14:12 - src.etl.pipeline - INFO - Processing game 0022301164
+2025-10-20 21:14:12 - src.etl.pipeline - INFO - Processing game 0022301163
+2025-10-20 21:14:13 - src.etl.pipeline - INFO - Processing game 0022301165
+2025-10-20 21:14:14 - src.etl.pipeline - INFO - Processing game 0022301160
+2025-10-20 21:14:14 - src.etl.pipeline - INFO - Processing game 0022301158
+2025-10-20 21:14:15 - src.etl.pipeline - INFO - Processing game 0022301161
+2025-10-20 21:14:15 - src.etl.pipeline - INFO - Processing game 0022301162
+2025-10-20 21:14:16 - src.etl.pipeline - INFO - Processing game 0022301159
+2025-10-20 21:14:19 - src.etl.pipeline - INFO - Processing game 0022301154
+2025-10-20 21:14:20 - src.etl.pipeline - INFO - Processing game 0022301153
+2025-10-20 21:14:20 - src.etl.pipeline - INFO - Processing game 0022301145
+2025-10-20 21:14:20 - src.etl.pipeline - INFO - Processing game 0022301149
+2025-10-20 21:14:21 - src.etl.pipeline - INFO - Processing game 0022301146
+2025-10-20 21:14:21 - src.etl.pipeline - INFO - Processing game 0022301147
+2025-10-20 21:14:23 - src.etl.pipeline - INFO - Processing game 0022301150
+2025-10-20 21:14:23 - src.etl.pipeline - INFO - Processing game 0022301148
+2025-10-20 21:14:24 - src.etl.pipeline - INFO - Processing game 2042300401
+2025-10-20 21:14:25 - src.etl.pipeline - INFO - Processing game 0022301152
+2025-10-20 21:14:25 - src.etl.pipeline - INFO - Processing game 0022301151
+2025-10-20 21:14:25 - src.etl.pipeline - INFO - Processing game 0022301144
+2025-10-20 21:14:26 - src.etl.pipeline - INFO - Processing game 0022301156
+2025-10-20 21:14:27 - src.etl.pipeline - INFO - Processing game 0022301155
+2025-10-20 21:14:27 - src.etl.pipeline - INFO - Processing game 0022301157
+2025-10-20 21:14:28 - src.etl.pipeline - INFO - Processing game 0022301140
+2025-10-20 21:14:29 - src.etl.pipeline - INFO - Processing game 2042300311
+2025-10-20 21:14:30 - src.etl.pipeline - INFO - Processing game 0022301131
+2025-10-20 21:14:30 - src.etl.pipeline - INFO - Processing game 0022301134
+2025-10-20 21:14:32 - src.etl.pipeline - INFO - Processing game 0022301133
+2025-10-20 21:14:32 - src.etl.pipeline - INFO - Processing game 0022301138
+2025-10-20 21:14:33 - src.etl.pipeline - INFO - Processing game 0022301142
+2025-10-20 21:14:34 - src.etl.pipeline - INFO - Processing game 0022301135
+2025-10-20 21:14:34 - src.etl.pipeline - INFO - Processing game 0022301141
+2025-10-20 21:14:34 - src.etl.pipeline - INFO - Processing game 0022301132
+2025-10-20 21:14:35 - src.etl.pipeline - INFO - Processing game 0022301137
+2025-10-20 21:14:35 - src.etl.pipeline - INFO - Processing game 0022301136
+2025-10-20 21:14:36 - src.etl.pipeline - INFO - Processing game 0022301139
+2025-10-20 21:14:37 - src.etl.pipeline - INFO - Processing game 2042300301
+2025-10-20 21:14:38 - src.etl.pipeline - INFO - Processing game 0022301143
+2025-10-20 21:14:38 - src.etl.pipeline - INFO - Processing game 0022301128
+2025-10-20 21:14:38 - src.etl.pipeline - INFO - Processing game 0022301130
+2025-10-20 21:14:39 - src.etl.pipeline - INFO - Processing game 0022301127
+2025-10-20 21:14:39 - src.etl.pipeline - INFO - Processing game 0022301129
+2025-10-20 21:14:40 - src.etl.pipeline - INFO - Processing game 0022301117
+2025-10-20 21:14:40 - src.etl.pipeline - INFO - Processing game 0022301116
+2025-10-20 21:14:41 - src.etl.pipeline - INFO - Processing game 0022301122
+2025-10-20 21:14:42 - src.etl.pipeline - INFO - Processing game 0022301119
+2025-10-20 21:14:42 - src.etl.pipeline - INFO - Processing game 0022301115
+2025-10-20 21:14:42 - src.etl.pipeline - INFO - Processing game 0022301118
+2025-10-20 21:14:42 - src.etl.pipeline - INFO - Processing game 0022301120
+2025-10-20 21:14:43 - src.etl.pipeline - INFO - Processing game 2042300201
+2025-10-20 21:14:44 - src.etl.pipeline - INFO - Processing game 0022301123
+2025-10-20 21:14:44 - src.etl.pipeline - INFO - Processing game 2042300231
+2025-10-20 21:14:45 - src.etl.pipeline - INFO - Processing game 0022301125
+2025-10-20 21:14:45 - src.etl.pipeline - INFO - Processing game 0022301121
+2025-10-20 21:14:45 - src.etl.pipeline - INFO - Processing game 0022301097
+2025-10-20 21:14:46 - src.etl.pipeline - INFO - Processing game 0022301126
+2025-10-20 21:14:46 - src.etl.pipeline - INFO - Processing game 0022301111
+2025-10-20 21:14:47 - src.etl.pipeline - INFO - Processing game 0022301113
+2025-10-20 21:14:48 - src.etl.pipeline - INFO - Processing game 2042300221
+2025-10-20 21:14:49 - src.etl.pipeline - INFO - Processing game 0022301114
+2025-10-20 21:14:49 - src.etl.pipeline - INFO - Processing game 2042300211
+2025-10-20 21:14:50 - src.etl.pipeline - INFO - Processing game 0022301124
+2025-10-20 21:14:51 - src.etl.pipeline - INFO - Processing game 0022301112
+2025-10-20 21:14:51 - src.etl.pipeline - INFO - Processing game 0022301108
+2025-10-20 21:14:52 - src.etl.pipeline - INFO - Processing game 0022301109
+2025-10-20 21:14:52 - src.etl.pipeline - INFO - Processing game 0022301103
+2025-10-20 21:14:53 - src.etl.pipeline - INFO - Processing game 0022301105
+2025-10-20 21:14:56 - src.etl.pipeline - INFO - Processing game 0022301102
+2025-10-20 21:14:57 - src.etl.pipeline - INFO - Processing game 0022301104
+2025-10-20 21:14:57 - src.etl.pipeline - INFO - Processing game 0022301110
+2025-10-20 21:14:58 - src.etl.pipeline - INFO - Processing game 0022301106
+2025-10-20 21:14:59 - src.etl.pipeline - INFO - Processing game 0022301107
+2025-10-20 21:15:00 - src.etl.pipeline - INFO - Processing game 0022301100
+2025-10-20 21:15:00 - src.etl.pipeline - INFO - Processing game 0022301101
+2025-10-20 21:15:00 - src.etl.pipeline - INFO - Processing game 2042300101
+2025-10-20 21:15:01 - src.etl.pipeline - INFO - Processing game 0022301094
+2025-10-20 21:15:02 - src.etl.pipeline - INFO - Processing game 0022301096
+2025-10-20 21:15:03 - src.etl.pipeline - INFO - Processing game 2042300102
+2025-10-20 21:15:03 - src.etl.pipeline - INFO - Processing game 2042300121
+2025-10-20 21:15:05 - src.etl.pipeline - INFO - Processing game 0022301095
+2025-10-20 21:15:05 - src.etl.pipeline - INFO - Processing game 0022301098
+2025-10-20 21:15:05 - src.etl.pipeline - INFO - Processing game 2042300131
+2025-10-20 21:15:06 - src.etl.pipeline - INFO - Processing game 0022300589
+2025-10-20 21:15:06 - src.etl.pipeline - INFO - Processing game 0022301099
+2025-10-20 21:15:07 - src.etl.pipeline - INFO - Processing game 0022301093
+2025-10-20 21:15:07 - __main__ - WARNING - Pipeline interrupted by user (Ctrl+C)

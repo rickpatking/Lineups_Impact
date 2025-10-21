@@ -9,14 +9,13 @@ CREATE TABLE IF NOT EXISTS teams (
 CREATE TABLE IF NOT EXISTS players (
     player_id INT PRIMARY KEY,
     player_name VARCHAR(80),
-    position VARCHAR(5),
+    position VARCHAR(10),
     height INT,
     weight INT
 );
 
 CREATE TABLE IF NOT EXISTS games(
     game_id INT PRIMARY KEY,
-    date DATE,
     home_team_id INT,
     away_team_id INT,
     home_score INT,
@@ -33,12 +32,12 @@ CREATE TABLE IF NOT EXISTS play_by_play(
     period INT,
     clock VARCHAR(15),
     seconds_left_in_game INT,
-    player_id,
-    player_name,
-    team_id,
+    player_id INT,
+    player_name VARCHAR(80),
+    team_id INT,
     description VARCHAR(200),
     action_type VARCHAR(80),
-    action_subtype CVARHAR(80),
+    action_subtype VARCHAR(80),
     shot_value INT,
     shot_result VARCHAR(10),
 
@@ -49,7 +48,7 @@ CREATE TABLE IF NOT EXISTS play_by_play(
 
 CREATE TABLE IF NOT EXISTS lineup_stints(
     stint_id SERIAL PRIMARY KEY,
-    game_id VARCHAR(10),
+    game_id INT,
     team_id INT,
     period INT,
     start_num INT,
