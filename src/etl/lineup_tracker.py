@@ -59,83 +59,23 @@ def get_quarter_starters(playbyplay, subs, quarter, team_id):
                 unique_ids = np.append(unique_ids, sub_series['prev_id'])
                 return (unique_ids.tolist())
             first_sub_series = first_sub_series.iloc[1:]
-
-        # more_events = df.head(50)
-        # more_uniques = more_events['personId'].unique()
-        # missed_players = np.setdiff1d(more_uniques, unique_ids)
-        # missed_players = missed_players.tolist()
-        # for i in range(len(missed_players)):
-        #     if missed_players[i] != first_sub_series['next_id']:
-        #         unique_ids = np.append(unique_ids, first_sub_series['prev_id'])
-        #         return (unique_ids.tolist())
     return (unique_ids.tolist())
 
-# def get_lineups(playbyplay, subs, team_id):
-#     all_lineups = []
-#     lineups_action_id = []
-
-#     team_subs = subs.loc[subs['teamId'] == team_id]
-#     for i in range(1, 5):
-
-#         quarter = team_subs[team_subs['period'] == i].copy()
-#         quarter_pbp = playbyplay[(playbyplay['period'] == i) & (playbyplay['teamId'] == team_id)].copy()
-#         starters = get_quarter_starters(playbyplay, subs, i, team_id)
-#         all_lineups.append(starters)
-#         lineups_action_id.append(quarter_pbp['actionId'].iloc[0])
-
-#         for index, sub in quarter.iterrows():
-#             try:
-#                 current_five = all_lineups[-1][:]
-#                 current_five.remove(sub['prev_id'])
-#                 current_five.append(sub['next_id'])
-#                 all_lineups.append(current_five)
-#                 lineups_action_id.append(index+1)
-#             except Exception as e:
-#                 print(e)
-#                 print(index)
-#                 print(current_five)
-#                 print(all_lineups[-1][:])
-#                 print()
-#     return all_lineups, lineups_action_id
 
 def clean_data(pbp):
     playbyplay = pbp.copy()
     playbyplay['minutes'] = playbyplay['clock'].str.split(r'PT|M|S').str[1]
     playbyplay['seconds'] = playbyplay['clock'].str.split(r'PT|M|S').str[2]
-    playbyplay['seconds_left_in_quarter'] = (pd.to_numeric(playbyplay['minutes']) * 60) + pd.to_numeric(playbyplay['seconds'])
-    playbyplay['seconds_left_in_game'] = round((pd.to_numeric(playbyplay['minutes']) * 60) + pd.to_numeric(playbyplay['seconds']) + (abs(4 - pd.to_numeric(playbyplay['period'])) * 720))
-    playbyplay['seconds_into_game'] = 28800.0 - playbyplay['seconds_left_in_game']
-    # make sure seconds into game works
-    # seconds_left_in_game is wrong
+    playbyplay['seconds_left_in_quarter'] = (pd.to_numeric(playbyplay['minutes']) * 60) + pd.to_numeric(playbyplay['seconds']).round(1)
+    playbyplay['seconds_left_in_game'] = (pd.to_numeric(playbyplay['minutes']) * 60) + pd.to_numeric(playbyplay['seconds']) + (abs(4 - pd.to_numeric(playbyplay['period'])) * 720).round(1)
+    playbyplay['seconds_into_game'] = (2880.0 - playbyplay['seconds_left_in_game']).round(1)
     return playbyplay
-
-# def get_stints(playbyplay, all_lineups, lineups_action_id, team_id):
-#     col_names = ['game_id', 'team_id', 'period', 'start_num', 'end_num', 'duration_secs', 'player1_id', 'player2_id', 'player3_id', 'player4_id', 'player5_id', 'lineup_hash']
-#     df = pd.DataFrame(columns=col_names)
-
-#     game_id = playbyplay['gameId'].iloc[0]
-#     for i in range(len(all_lineups)):
-#         start_num = lineups_action_id[i]
-#         period = playbyplay.loc[playbyplay['actionId'] == start_num, 'period'].iloc[0]
-#         if (i == len(all_lineups)-1):
-#             end_num = playbyplay['actionId'].iloc[-1]
-#         else:
-#             end_num = lineups_action_id[i+1]
-#         start_secs = playbyplay.loc[playbyplay['actionId'] == start_num, 'seconds_left_in_game'].iloc[0]
-#         end_secs = playbyplay.loc[playbyplay['actionId'] == end_num, 'seconds_left_in_game'].iloc[0]
-#         duration_secs = start_secs - end_secs
-#         player1_id = all_lineups[i][0]
-#         player2_id = all_lineups[i][1]
-#         player3_id = all_lineups[i][2]
-#         player4_id = all_lineups[i][3]
-#         player5_id = all_lineups[i][4]
-#         lineup_hash = '-'.join(str(id) for id in all_lineups[i])
-#         df.loc[len(df)] = [game_id, team_id, period, start_num, end_num, duration_secs, player1_id, player2_id, player3_id, player4_id, player5_id, lineup_hash]
-#     return df
 
 def get_lineups(game_id, team_id):
     rotation = gamerotation.GameRotation(game_id)
     rotation = rotation.get_data_frames()[0]
+    rotation['IN_TIME_REAL'] = pd.to_numeric(rotation['IN_TIME_REAL'])/10
+    rotation['OUT_TIME_REAL'] = pd.to_numeric(rotation['OUT_TIME_REAL'])/10
     sorted_rotations = rotation.sort_values(by='IN_TIME_REAL')
     sorted_rotations = sorted_rotations.reset_index()
 
@@ -150,7 +90,7 @@ def get_lineups(game_id, team_id):
         curr_lineup = lineups[-1]['PLAYERS']
         min_time = lineups[-1]["OUT_TIME_REAL"]
         if (i == len(sorted_rotations.iloc[5:]) - 1):
-            max_time = 28800.0
+            max_time = 2880.0
         else:
             max_time = sorted_rotations['IN_TIME_REAL'].iloc[index + 1]
         to_remove_time = sorted_rotations['IN_TIME_REAL'].iloc[index]
@@ -171,31 +111,29 @@ def get_lineups(game_id, team_id):
     return lineups
 
 def get_stints(playbyplay, all_lineups, team_id):
-    col_names = ['game_id', 'team_id', 'period', 'start_num', 'end_num', 'duration_secs', 'player1_id', 'player2_id', 'player3_id', 'player4_id', 'player5_id', 'lineup_hash']
+    col_names = ['game_id', 'team_id', 'start_num', 'end_num', 'duration_secs', 'player1_id', 'player2_id', 'player3_id', 'player4_id', 'player5_id', 'lineup_hash']
     df = pd.DataFrame(columns=col_names)
 
     game_id = playbyplay['gameId'].iloc[0]
     for i in range(len(all_lineups)):
-        lineup = all_lineups['PLAYERS']
-        lineup_start = all_lineups['IN_TIME_REAL']
-        lineup_end = all_lineups["OUT_TIME_REAL"]
+        lineup = all_lineups[i]['PLAYERS']
+        lineup_start = all_lineups[i]['IN_TIME_REAL']
+        lineup_end = all_lineups[i]["OUT_TIME_REAL"]
 
-        # start_num = lineups_action_id[i]
-        # period = playbyplay.loc[playbyplay['actionId'] == start_num, 'period'].iloc[0]
-        # if (i == len(all_lineups)-1):
-        #     end_num = playbyplay['actionId'].iloc[-1]
-        # else:
-        #     end_num = lineups_action_id[i+1]
-        # finish being able to get the action id
+        start = playbyplay[playbyplay['seconds_into_game'] == lineup_start].copy()
+        start_num = start['actionId'].iloc[0]
 
-        duration_secs = lineup_start - lineup_end
+        end = playbyplay[playbyplay['seconds_into_game'] == lineup_end].copy()
+        end_num = end['actionId'].iloc[0]
+
+        duration_secs = lineup_end - lineup_start
         player1_id = lineup[0]
         player2_id = lineup[1]
         player3_id = lineup[2]
         player4_id = lineup[3]
         player5_id = lineup[4]
         lineup_hash = '-'.join(str(id) for id in lineup)
-        # df.loc[len(df)] = [game_id, team_id, period, start_num, end_num, duration_secs, player1_id, player2_id, player3_id, player4_id, player5_id, lineup_hash]
+        df.loc[len(df)] = [game_id, team_id, start_num, end_num, duration_secs, player1_id, player2_id, player3_id, player4_id, player5_id, lineup_hash]
     return df
 
 
@@ -210,7 +148,8 @@ game_id = '0042400407'
 clean_subs_df = clean_subs_pbp(df, pacers_id)
 lineups = get_lineups(game_id, pacers_id)
 clean_pbp = clean_data(df)
-print(clean_pbp['seconds_into_game'])
+stints = get_stints(clean_pbp, lineups, pacers_id)
+print(stints.iloc[0])
 # stints = get_stints(clean_pbp, lineups[0], lineups[1], pacers_id)
 # stints = stints[stints['duration_secs'] != 0].copy()
 # stints.to_csv('data/raw/thunder_pacers_game7_stints.csv', index=False)

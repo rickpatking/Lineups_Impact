@@ -51,7 +51,6 @@ CREATE TABLE IF NOT EXISTS lineup_stints(
     stint_id SERIAL PRIMARY KEY,
     game_id INT,
     team_id INT,
-    period INT,
     start_num INT,
     end_num INT,
     duration_secs INT,
