@@ -1,16 +1,24 @@
 -- Active: 1760807926261@@127.0.0.1@5432@nba_analysis
 -- Active: 1760716511493@@127.0.0.1@5432
+
+DROP TABLE IF EXISTS lineup_stints CASCADE;
+DROP TABLE IF EXISTS play_by_play CASCADE;
+DROP TABLE IF EXISTS games CASCADE;
+DROP TABLE IF EXISTS players CASCADE;
+DROP TABLE IF EXISTS teams CASCADE;
+
+
 CREATE TABLE IF NOT EXISTS teams (
     team_id INT PRIMARY KEY,
-    team_name VARCHAR(3),
-    abbreviation VARCHAR(100)
+    team_name VARCHAR(100),
+    abbreviation VARCHAR(10)
 );
 
 CREATE TABLE IF NOT EXISTS players (
     player_id INT PRIMARY KEY,
     player_name VARCHAR(80),
     position VARCHAR(10),
-    height INT,
+    height VARCHAR(10),
     weight INT
 );
 
@@ -72,3 +80,9 @@ CREATE TABLE IF NOT EXISTS lineup_stints(
 -- CREATE MATERIALIZED VIEW active_lineups
 
 -- CREATE MATERIALIZED VIEW possession_stats
+
+TRUNCATE TABLE lineup_stints CASCADE;
+TRUNCATE TABLE play_by_play CASCADE;
+TRUNCATE TABLE games CASCADE;
+TRUNCATE TABLE players CASCADE;
+TRUNCATE TABLE teams CASCADE;

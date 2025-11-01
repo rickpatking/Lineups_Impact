@@ -94,15 +94,19 @@ def get_lineups(game_id, team_id):
         else:
             max_time = sorted_rotations['IN_TIME_REAL'].iloc[index + 1]
         to_remove_time = sorted_rotations['IN_TIME_REAL'].iloc[index]
-        to_remove_player = sorted_rotations[sorted_rotations['OUT_TIME_REAL'] == to_remove_time].copy()
-        to_remove_player = to_remove_player['PERSON_ID']
-        for player in to_remove_player:
-            if player not in curr_lineup:
-                continue
-            else:
-                to_remove_player = player
+        to_remove_player_series = sorted_rotations[sorted_rotations['OUT_TIME_REAL'] == to_remove_time].copy()
+        to_remove_player_series = to_remove_player_series['PERSON_ID']
 
-        curr_lineup.remove(to_remove_player)
+        # Find which player in the series is actually in the current lineup
+        to_remove_player = None
+        for player in to_remove_player_series:
+            if player in curr_lineup:
+                to_remove_player = player
+                break
+
+        # If we found a player to remove, remove them
+        if to_remove_player is not None:
+            curr_lineup.remove(to_remove_player)
         curr_lineup.append(sorted_rotations['PERSON_ID'].iloc[index])
         curr_5 = {"PLAYERS": curr_lineup,
                 "IN_TIME_REAL": min_time,
@@ -120,11 +124,21 @@ def get_stints(playbyplay, all_lineups, team_id):
         lineup_start = all_lineups[i]['IN_TIME_REAL']
         lineup_end = all_lineups[i]["OUT_TIME_REAL"]
 
-        start = playbyplay[playbyplay['seconds_into_game'] == lineup_start].copy()
+        # start = playbyplay[playbyplay['seconds_into_game'] == lineup_start].copy()
+        # start_num = start['actionId'].iloc[0]
+
+        # end = playbyplay[playbyplay['seconds_into_game'] == lineup_end].copy()
+        # end_num = end['actionId'].iloc[0]
+
+        start = playbyplay.iloc[(playbyplay['seconds_into_game'] - lineup_end).abs().argsort()][:1]
+        if len(start) == 0:
+            raise ValueError(f"No play-by-play data found near lineup start time {lineup_end}")
         start_num = start['actionId'].iloc[0]
 
-        end = playbyplay[playbyplay['seconds_into_game'] == lineup_end].copy()
-        end_num = end['actionId'].iloc[0]
+        end = playbyplay.iloc[(playbyplay['seconds_into_game'] - lineup_start).abs().argsort()][:1]
+        if len(start) == 0:
+            raise ValueError(f"No play-by-play data found near lineup start time {lineup_start}")
+        end_num = start['actionId'].iloc[0]
 
         duration_secs = lineup_end - lineup_start
         player1_id = lineup[0]
@@ -141,15 +155,16 @@ def get_stints(playbyplay, all_lineups, team_id):
 
 
 # testing
-df = pd.read_csv('data/raw/thunder_pacers_game7.csv')
-pacers_id = 1610612754
-game_id = '0042400407'
-# # test pacers
-clean_subs_df = clean_subs_pbp(df, pacers_id)
-lineups = get_lineups(game_id, pacers_id)
-clean_pbp = clean_data(df)
-stints = get_stints(clean_pbp, lineups, pacers_id)
-print(stints.iloc[0])
+# df = pd.read_csv('data/raw/thunder_pacers_game7.csv')
+# pacers_id = 1610612754
+# game_id = '0042400407'
+# # # test pacers
+# clean_subs_df = clean_subs_pbp(df, pacers_id)
+# lineups = get_lineups(game_id, pacers_id)
+# print(lineups)
+# clean_pbp = clean_data(df)
+# stints = get_stints(clean_pbp, lineups, pacers_id)
+# print(stints.iloc[0])
 # stints = get_stints(clean_pbp, lineups[0], lineups[1], pacers_id)
 # stints = stints[stints['duration_secs'] != 0].copy()
 # stints.to_csv('data/raw/thunder_pacers_game7_stints.csv', index=False)
