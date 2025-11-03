@@ -73,7 +73,19 @@ def clean_data(pbp):
 
 def get_lineups(game_id, team_id):
     rotation = gamerotation.GameRotation(game_id)
-    rotation = rotation.get_data_frames()[0]
+    rotation_dfs = rotation.get_data_frames()
+
+    # gamerotation returns 2 dataframes (one per team)
+    # Find the dataframe for the requested team
+    rotation = None
+    for df in rotation_dfs:
+        if team_id in df['TEAM_ID'].values:
+            rotation = df.copy()
+            break
+
+    if rotation is None or len(rotation) == 0:
+        raise ValueError(f"No rotation data found for team {team_id} in game {game_id}")
+
     rotation['IN_TIME_REAL'] = pd.to_numeric(rotation['IN_TIME_REAL'])/10
     rotation['OUT_TIME_REAL'] = pd.to_numeric(rotation['OUT_TIME_REAL'])/10
     sorted_rotations = rotation.sort_values(by='IN_TIME_REAL')
@@ -124,29 +136,27 @@ def get_stints(playbyplay, all_lineups, team_id):
         lineup_start = all_lineups[i]['IN_TIME_REAL']
         lineup_end = all_lineups[i]["OUT_TIME_REAL"]
 
-        # start = playbyplay[playbyplay['seconds_into_game'] == lineup_start].copy()
-        # start_num = start['actionId'].iloc[0]
-
-        # end = playbyplay[playbyplay['seconds_into_game'] == lineup_end].copy()
-        # end_num = end['actionId'].iloc[0]
-
-        start = playbyplay.iloc[(playbyplay['seconds_into_game'] - lineup_end).abs().argsort()][:1]
-        if len(start) == 0:
-            raise ValueError(f"No play-by-play data found near lineup start time {lineup_end}")
-        start_num = start['actionId'].iloc[0]
-
-        end = playbyplay.iloc[(playbyplay['seconds_into_game'] - lineup_start).abs().argsort()][:1]
+        # Find the action_id closest to lineup start time
+        start = playbyplay.iloc[(playbyplay['seconds_into_game'] - lineup_start).abs().argsort()][:1]
         if len(start) == 0:
             raise ValueError(f"No play-by-play data found near lineup start time {lineup_start}")
-        end_num = start['actionId'].iloc[0]
+        start_num = start['actionId'].iloc[0]
+
+        # Find the action_id closest to lineup end time
+        end = playbyplay.iloc[(playbyplay['seconds_into_game'] - lineup_end).abs().argsort()][:1]
+        if len(end) == 0:
+            raise ValueError(f"No play-by-play data found near lineup end time {lineup_end}")
+        end_num = end['actionId'].iloc[0]
 
         duration_secs = lineup_end - lineup_start
-        player1_id = lineup[0]
-        player2_id = lineup[1]
-        player3_id = lineup[2]
-        player4_id = lineup[3]
-        player5_id = lineup[4]
-        lineup_hash = '-'.join(str(id) for id in lineup)
+        # Sort player IDs to ensure consistency across games
+        sorted_lineup = sorted(lineup)
+        player1_id = sorted_lineup[0]
+        player2_id = sorted_lineup[1]
+        player3_id = sorted_lineup[2]
+        player4_id = sorted_lineup[3]
+        player5_id = sorted_lineup[4]
+        lineup_hash = '-'.join(str(id) for id in sorted_lineup)
         df.loc[len(df)] = [game_id, team_id, start_num, end_num, duration_secs, player1_id, player2_id, player3_id, player4_id, player5_id, lineup_hash]
     return df
 

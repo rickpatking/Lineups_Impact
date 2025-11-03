@@ -11,13 +11,13 @@ DROP TABLE IF EXISTS teams CASCADE;
 CREATE TABLE IF NOT EXISTS teams (
     team_id INT PRIMARY KEY,
     team_name VARCHAR(100),
-    abbreviation VARCHAR(10)
+    abbreviation VARCHAR(3)
 );
 
 CREATE TABLE IF NOT EXISTS players (
     player_id INT PRIMARY KEY,
     player_name VARCHAR(80),
-    position VARCHAR(10),
+    position VARCHAR(50),
     height VARCHAR(10),
     weight INT
 );

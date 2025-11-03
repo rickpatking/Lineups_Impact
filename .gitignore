@@ -1,3 +1,32 @@
 .env
 .env.local
 .env.*.local
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.pytest_cache/
+
+# Logs
+logs/*.log
+
+# Data files (optional - uncomment if you don't want to track data)
+# data/
+
+# Windows junk
+nul
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Power BI
+*.pbix

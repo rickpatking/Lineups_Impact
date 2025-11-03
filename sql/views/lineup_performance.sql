@@ -56,9 +56,9 @@ WITH stint_events AS (
     FROM lineup_stints ls
     INNER JOIN play_by_play pbp
         ON ls.game_id = pbp.game_id
-        -- Event must occur during this stint's time period
-        AND pbp.seconds_into_game >= ls.start_num
-        AND pbp.seconds_into_game <= ls.end_num
+        -- Event must occur during this stint (by action_id range)
+        AND pbp.action_id >= ls.start_num
+        AND pbp.action_id <= ls.end_num
 ),
 
 stint_scoring AS (
@@ -131,42 +131,36 @@ SELECT
     points_scored,
     points_allowed,
     points_scored - points_allowed AS plus_minus,
-    -- Estimated possessions (simplified formula)
-    -- Using field goal attempts as proxy for possessions
-    GREATEST(field_goal_attempts, 1) AS possessions,
+    -- Estimated possessions (better formula using both teams' FGA)
+    -- Possessions should be similar for both teams in a stint
+    field_goal_attempts AS possessions,
     -- Per-minute metrics (convert seconds to minutes)
-    CASE
-        WHEN duration_secs > 0
-        THEN ROUND((points_scored::DECIMAL / duration_secs) * 60, 2)
-        ELSE 0
-    END AS points_per_minute,
-
-    CASE
-        WHEN duration_secs > 0
-        THEN ROUND((points_allowed::DECIMAL / duration_secs) * 60, 2)
-        ELSE 0
-    END AS points_allowed_per_minute,
+    -- Use NULLIF to prevent division by zero errors in Power BI
+    ROUND((points_scored::DECIMAL / NULLIF(duration_secs, 0)) * 60, 2) AS points_per_minute,
+    ROUND((points_allowed::DECIMAL / NULLIF(duration_secs, 0)) * 60, 2) AS points_allowed_per_minute,
     -- Per-100-possession metrics (standard NBA efficiency metric)
+    -- Only calculate if we have reasonable possession count (at least duration_secs / 24)
+    -- Average NBA possession is ~14 seconds, so min possessions = duration_secs / 24
     CASE
-        WHEN field_goal_attempts > 0
-        THEN ROUND((points_scored::DECIMAL / field_goal_attempts) * 100, 2)
-        ELSE 0
+        WHEN field_goal_attempts >= (duration_secs / NULLIF(24.0, 0)) AND field_goal_attempts > 0
+        THEN ROUND((points_scored::DECIMAL / NULLIF(field_goal_attempts, 0)) * 100, 2)
+        ELSE NULL  -- Not enough data for reliable rating
     END AS offensive_rating,
 
     CASE
-        WHEN field_goal_attempts > 0
-        THEN ROUND((points_allowed::DECIMAL / field_goal_attempts) * 100, 2)
-        ELSE 0
+        WHEN field_goal_attempts >= (duration_secs / NULLIF(24.0, 0)) AND field_goal_attempts > 0
+        THEN ROUND((points_allowed::DECIMAL / NULLIF(field_goal_attempts, 0)) * 100, 2)
+        ELSE NULL  -- Not enough data for reliable rating
     END AS defensive_rating,
     -- Net rating (offensive rating - defensive rating)
     CASE
-        WHEN field_goal_attempts > 0
+        WHEN field_goal_attempts >= (duration_secs / NULLIF(24.0, 0)) AND field_goal_attempts > 0
         THEN ROUND(
-            ((points_scored::DECIMAL / field_goal_attempts) * 100) -
-            ((points_allowed::DECIMAL / field_goal_attempts) * 100),
+            ((points_scored::DECIMAL / NULLIF(field_goal_attempts, 0)) * 100) -
+            ((points_allowed::DECIMAL / NULLIF(field_goal_attempts, 0)) * 100),
             2
         )
-        ELSE 0
+        ELSE NULL  -- Not enough data for reliable rating
     END AS net_rating
 
 FROM stint_scoring;
@@ -212,21 +206,29 @@ SELECT
     ROUND(AVG(points_allowed), 2) AS avg_points_allowed_per_stint,
     ROUND(AVG(plus_minus), 2) AS avg_plus_minus_per_stint,
     -- Overall efficiency (per 100 possessions)
-    ROUND(AVG(offensive_rating), 2) AS avg_offensive_rating,
-    ROUND(AVG(defensive_rating), 2) AS avg_defensive_rating,
-    ROUND(AVG(net_rating), 2) AS avg_net_rating,
+    -- Calculate from totals to get accurate aggregate ratings
+    CASE
+        WHEN SUM(possessions) > 0
+        THEN ROUND((SUM(points_scored)::DECIMAL / SUM(possessions)) * 100, 2)
+        ELSE NULL
+    END AS avg_offensive_rating,
+    CASE
+        WHEN SUM(possessions) > 0
+        THEN ROUND((SUM(points_allowed)::DECIMAL / SUM(possessions)) * 100, 2)
+        ELSE NULL
+    END AS avg_defensive_rating,
+    CASE
+        WHEN SUM(possessions) > 0
+        THEN ROUND(
+            ((SUM(points_scored)::DECIMAL / SUM(possessions)) * 100) -
+            ((SUM(points_allowed)::DECIMAL / SUM(possessions)) * 100),
+            2
+        )
+        ELSE NULL
+    END AS avg_net_rating,
     -- Per-minute metrics
-    CASE
-        WHEN SUM(duration_secs) > 0
-        THEN ROUND((SUM(points_scored)::DECIMAL / SUM(duration_secs)) * 60, 2)
-        ELSE 0
-    END AS overall_points_per_minute,
-
-    CASE
-        WHEN SUM(duration_secs) > 0
-        THEN ROUND((SUM(points_allowed)::DECIMAL / SUM(duration_secs)) * 60, 2)
-        ELSE 0
-    END AS overall_points_allowed_per_minute
+    ROUND((SUM(points_scored)::DECIMAL / NULLIF(SUM(duration_secs), 0)) * 60, 2) AS overall_points_per_minute,
+    ROUND((SUM(points_allowed)::DECIMAL / NULLIF(SUM(duration_secs), 0)) * 60, 2) AS overall_points_allowed_per_minute
 
 FROM lineup_stint_stats
 GROUP BY
@@ -263,6 +265,7 @@ WITH player_on_court AS (
         points_scored,
         points_allowed,
         plus_minus,
+        possessions,
         offensive_rating,
         defensive_rating,
         net_rating
@@ -270,27 +273,27 @@ WITH player_on_court AS (
         -- Union all 5 player columns into one player_id column
         SELECT player1_id AS player_id, team_id, stint_id, game_id,
                duration_secs, points_scored, points_allowed, plus_minus,
-               offensive_rating, defensive_rating, net_rating
+               possessions, offensive_rating, defensive_rating, net_rating
         FROM lineup_stint_stats
         UNION ALL
         SELECT player2_id, team_id, stint_id, game_id,
                duration_secs, points_scored, points_allowed, plus_minus,
-               offensive_rating, defensive_rating, net_rating
+               possessions, offensive_rating, defensive_rating, net_rating
         FROM lineup_stint_stats
         UNION ALL
         SELECT player3_id, team_id, stint_id, game_id,
                duration_secs, points_scored, points_allowed, plus_minus,
-               offensive_rating, defensive_rating, net_rating
+               possessions, offensive_rating, defensive_rating, net_rating
         FROM lineup_stint_stats
         UNION ALL
         SELECT player4_id, team_id, stint_id, game_id,
                duration_secs, points_scored, points_allowed, plus_minus,
-               offensive_rating, defensive_rating, net_rating
+               possessions, offensive_rating, defensive_rating, net_rating
         FROM lineup_stint_stats
         UNION ALL
         SELECT player5_id, team_id, stint_id, game_id,
                duration_secs, points_scored, points_allowed, plus_minus,
-               offensive_rating, defensive_rating, net_rating
+               possessions, offensive_rating, defensive_rating, net_rating
         FROM lineup_stint_stats
     ) AS all_player_stints
 )
@@ -310,15 +313,28 @@ SELECT
     SUM(poc.plus_minus) AS on_court_plus_minus,
     -- Average per-stint impact
     ROUND(AVG(poc.plus_minus), 2) AS avg_plus_minus_per_stint,
-    ROUND(AVG(poc.offensive_rating), 2) AS avg_offensive_rating,
-    ROUND(AVG(poc.defensive_rating), 2) AS avg_defensive_rating,
-    ROUND(AVG(poc.net_rating), 2) AS avg_net_rating,
-    -- Per-48-minutes metrics (standard NBA comparison)
+    -- Calculate ratings from totals to avoid NULL issues
     CASE
-        WHEN SUM(poc.duration_secs) > 0
-        THEN ROUND((SUM(poc.plus_minus)::DECIMAL / SUM(poc.duration_secs)) * 2880, 2)
-        ELSE 0
-    END AS plus_minus_per_48min
+        WHEN SUM(poc.possessions) > 0
+        THEN ROUND((SUM(poc.points_scored)::DECIMAL / SUM(poc.possessions)) * 100, 2)
+        ELSE NULL
+    END AS avg_offensive_rating,
+    CASE
+        WHEN SUM(poc.possessions) > 0
+        THEN ROUND((SUM(poc.points_allowed)::DECIMAL / SUM(poc.possessions)) * 100, 2)
+        ELSE NULL
+    END AS avg_defensive_rating,
+    CASE
+        WHEN SUM(poc.possessions) > 0
+        THEN ROUND(
+            ((SUM(poc.points_scored)::DECIMAL / SUM(poc.possessions)) * 100) -
+            ((SUM(poc.points_allowed)::DECIMAL / SUM(poc.possessions)) * 100),
+            2
+        )
+        ELSE NULL
+    END AS avg_net_rating,
+    -- Per-48-minutes metrics (standard NBA comparison)
+    ROUND((SUM(poc.plus_minus)::DECIMAL / NULLIF(SUM(poc.duration_secs), 0)) * 2880, 2) AS plus_minus_per_48min
 
 FROM player_on_court poc
 INNER JOIN players p ON poc.player_id = p.player_id
